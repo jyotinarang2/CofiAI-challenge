@@ -19,3 +19,64 @@ Cofi is a simple and efficient checkout system designed to manage products, appl
 - README.md: Project documentation.
 - requirements.txt: List of dependencies.
 
+## How to Use
+1. The system is configured using a `config.json` file. You can modify this file to add or change products and discounts.
+2. You can scan items in any order using the `scan` method.
+   - checkout.scan("VOUCHER")
+   - checkout.scan("TSHIRT")
+   - checkout.scan("MUG")
+3. Call the `total` method to get the total price of the items in the cart.
+   - total_price = checkout.total()
+
+## Example Configuration (config.json)
+```
+{
+  "products": [
+    {
+      "skuName": "VOUCHER",
+      "skuID": 1,
+      "name": "Cofi Voucher",
+      "price": 500
+    },
+    {
+      "skuName": "TSHIRT",
+      "skuID": 2,
+      "name": "Cofi T-Shirt",
+      "price": 2000
+    },
+    {
+      "skuName": "MUG",
+      "skuID": 3,
+      "name": "Cofi Coffee Mug",
+      "price": 750
+    }
+  ],
+  "promotions": [
+    {
+      "promoName": "SWAG",
+      "promoType": "bundle",
+      "priority": 1,
+      "skuItems": [
+        "TSHIRT",
+        "VOUCHER",
+        "MUG"
+      ],
+      "price": 2500
+    },
+    {
+      "promoName": "2-for-1 Voucher",
+      "promoType": "twoForOne",
+      "priority": 2,
+      "skuItem": "VOUCHER"
+    },
+    {
+      "promoName": "Bulk  Discount",
+      "promoType": "bulkPrice",
+      "priority": 1,
+      "skuItem": "TSHIRT",
+      "minQty": 3,
+      "unitPrice": 1900
+    }
+  ]
+}
+```

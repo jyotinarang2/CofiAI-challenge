@@ -81,20 +81,24 @@ Cofi is a simple and efficient checkout system designed to manage products, appl
 }
 ```
 ## Requirements
-Install dependencies using pip:
-```pip install -r requirements.txt
-```
+Install the required packages using pip:
+```bash
+pip install -r requirements.txt
+```     
 ## Usage Example
+Run the checkout system from the command line:
 python checkout_with_promo_priority.py --config config.json VOUCHER TSHIRT MUG
 
 ## CLI Commands
+
 - `--config`: Specify the path to the configuration file (default is `config.json`
 - VOUCHER, TSHIRT, MUG: List of SKUs to scan.
 
 ## Running Tests
 Run the unit tests using pytest:
-```pytest -q
-```
+```bash
+pytest -q
+
 ### With coverage report 
 pytest -q --cov=checkout_with_promo_priority --cov-report=term-missing 
 

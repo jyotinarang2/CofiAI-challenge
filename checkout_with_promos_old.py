@@ -1,8 +1,4 @@
 import json
-import os.path
-import sys
-
-import click
 from collections import Counter
 
 
@@ -88,34 +84,12 @@ def load_config(path):
         cfg = json.load(f)
     return Checkout(cfg)
 
-
-@click.command()
-@click.option('--config', default='config.json', help='Path to the configuration file.')
-@click.argument('items', nargs=-1)
-def cli(config, items):
-    """CLI for the Checkout system."""
-    if not os.path.exists(config):
-        click.echo(f"Config file {config} not found.")
-        sys.exit(1)
-    # Load configuration
-    try:
-        checkout = load_config(config)
-    except Exception as e:
-        click.echo(f"Error loading config: {e}")
-        sys.exit(1)
-
-    # If no items are scanned
-    if not items:
-        click.echo("No items scanned. Please provide item SKUs as arguments.")
-        sys.exit(1)
-
-    # Scan items
-    for item in items:
-        checkout.scan(item)
-    click.echo(f"Total amount: €{checkout.total()}")
-
 if __name__ == '__main__':
-    cli()
-
-
-
+    #Load configuration
+    checkout = load_config('config.json')
+    # Scan items
+    items_to_scan = ["VOUCHER", "TSHIRT", "MUG", "VOUCHER", "MUG", "TSHIRT", "TSHIRT"]
+    for item in items_to_scan:
+        checkout.scan(item)
+    # Calculate total
+    print("Total amount:", checkout.total())

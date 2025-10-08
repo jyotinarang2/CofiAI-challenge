@@ -88,7 +88,7 @@ def test_single_mug_no_discount():
     assert ck.total() == "7.50€"  # No discount applied
 
 
-def no_discount_multiple_items():
+def test_no_discount_multiple_items():
     ck = new_checkout()
     items = ["MUG", "MUG"]
     for item in items:

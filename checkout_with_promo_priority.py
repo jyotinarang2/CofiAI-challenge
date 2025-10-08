@@ -1,3 +1,14 @@
+"""Checkout engine for a retail system with prioritized promotions.
+Key Features:
+- Load product and promotion configurations from a JSON file.
+- Scan items by SKU and compute total price with applicable promotions.
+- Current promotions include:
+    - Bundle deals (e.g., buy a set of items for a special price).
+    - Bulk pricing (e.g., discounted unit price when buying in bulk).
+    - Two-for-one offers (e.g., buy one get one free).
+- Promotions are applied based on their priority, allowing for flexible discount strategies.
+- Items can be scanned via a command-line interface (CLI).
+"""
 import json
 import os.path
 import sys
@@ -7,6 +18,13 @@ from collections import Counter
 
 
 class Checkout:
+    """Checkout system with prioritized promotions.
+    Attributes:
+        products (dict): Maps SKU names to their prices in cents.
+        operators (list): List of promotions sorted by priority.
+        counts (Counter): Tracks scanned item quantities.
+    """
+
     def __init__(self, cfg):
         # Load products and prices from config
         self.products = {p['skuName']: p['price'] for p in cfg.get('products', [])}
@@ -32,7 +50,7 @@ class Checkout:
                     'name': promo['promoName'],
                     'priority': promo_priority,
                     'minQty': promo.get('minQty'),
-                    'skuItem': promo.get('skuItem'),
+                    'skuItem': promo.get('skuItem'), # Single SKU for bulk pricing
                     'unitPrice': promo.get('unitPrice'),
                     'type': ptype
                 })
@@ -47,15 +65,19 @@ class Checkout:
         self.counts = Counter()
 
     def scan(self, sku):
+        """Scan an item by SKU.
+        Raises ValueError if SKU is unknown."""
         if sku not in self.products:
             raise ValueError(f"Unknown SKU: {sku}")
         self.counts[sku] += 1
 
     def total(self):
+        """Return total price of all products as a formatted string."""
         total_cents = self._compute_total()
         return f"{total_cents / 100:.2f}€"
 
     def _compute_total(self):
+        """Compute total price applying promotions based on priority."""
         remaining = Counter(self.counts)
         total = 0
 
@@ -91,16 +113,21 @@ class Checkout:
         return total
 
 def load_config(path):
+    """Load configuration from a JSON file."""
     with open(path, 'r') as f:
         cfg = json.load(f)
     return Checkout(cfg)
 
 
 @click.command()
-@click.option('--config', default='config.json', help='Path to the configuration file.')
+@click.option('--config', default='config.json', help='Path to the configuration file (price in cents).')
 @click.argument('items', nargs=-1)
 def cli(config, items):
-    """CLI for the Checkout system."""
+    """CLI for the Checkout system.
+    Example usage:
+        python checkout_with_promo_priority.py --config config.json VOUCHER TSHIRT MUG
+    """
+
     if not os.path.exists(config):
         click.echo(f"Config file {config} not found.")
         sys.exit(1)

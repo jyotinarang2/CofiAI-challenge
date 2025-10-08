@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from checkout_with_promo_priority import Checkout, load_config, cli
 from click.testing import CliRunner
 
-CONFIG_PATH = "config_with_priority.json"
+CONFIG_PATH = "config.json"
 
 def test_cli_missing_config():
     runner = CliRunner()

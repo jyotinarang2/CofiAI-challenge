@@ -98,10 +98,12 @@ python checkout_with_promo_priority.py --config config.json VOUCHER TSHIRT MUG
 Run the unit tests using pytest:
 ```bash
 pytest -q
+```
 
-### With coverage report 
+## With coverage report
+```bash
 pytest -q --cov=checkout_with_promo_priority --cov-report=term-missing 
-
+```
 ## Project Structure
 ```.
 ├── cofi
